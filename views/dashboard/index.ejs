@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+  <div class="main-container dashboard-page-wrapper">
+
+    <!-- 🔸 SIDEBAR DIAMBIL DARI PARTIAL (AGAR TIDAK HILANG TIAP HALAMAN) -->
+    <%- include('../partials/sidebar_admin') %>
+
+    <main class="dashboard-main-content">
+
+      <div class="header-section">
+        <h1 class="user-welcome">Hai Admin, <%= user ? user.nama : "Admin" %>!</h1>
+      </div>
+
+      <!-- GRID KARTU STATISTIK -->
+      <div class="dashboard-grid">
+        <a href="/produk" class="card-link">
+          <div class="dashboard-card">
+            <div class="card-icon">📦</div>
+            <div class="card-info">
+              <h3>Total Produk</h3>
+              <p><%= data.totalProduk %></p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/produk" class="card-link">
+          <div class="dashboard-card">
+            <div class="card-icon">📊</div>
+            <div class="card-info">
+              <h3>Total Stok</h3>
+              <p><%= data.totalStok %></p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/users/manage" class="card-link">
+          <div class="dashboard-card">
+            <div class="card-icon">👥</div>
+            <div class="card-info">
+              <h3>Total Pengguna</h3>
+              <p><%= data.totalUser %></p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/pesanan" class="card-link">
+          <div class="dashboard-card">
+            <div class="card-icon">🛒</div>
+            <div class="card-info">
+              <h3>Total Pesanan</h3>
+              <p><%= data.totalPesanan %></p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- ===============================
+           📈 LAPORAN PENJUALAN HARIAN
+      ================================ -->
+      <section style="margin-top:40px;">
+        <h2 style="color:#3d2b1f; margin-bottom:15px;">Laporan Penjualan Harian</h2>
+
+        <!-- FORM FILTER -->
+        <form action="/dashboard" method="get" class="filter-form" style="margin-bottom: 20px; display:flex; align-items:center; gap:10px;">
+          <label for="start" style="font-weight:500;">Dari:</label>
+          <input type="date" name="start" id="start" value="<%= start || '' %>" required>
+          
+          <label for="end" style="font-weight:500;">Sampai:</label>
+          <input type="date" name="end" id="end" value="<%= end || '' %>" required>
+          
+          <button type="submit" class="btn">🔍 Filter</button>
+          <a href="/dashboard" class="btn-small btn-delete">Reset</a>
+        </form>
+
+        <!-- CHART PENJUALAN -->
+        <div style="background:#fff; border-radius:12px; padding:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+          <canvas id="salesChart" height="120"></canvas>
+        </div>
+
+        <!-- TABEL LAPORAN -->
+        <% if (laporan && laporan.length > 0) { %>
+          <table class="product-table" style="margin-top:25px;">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jumlah Pesanan</th>
+                <th>Total Penjualan (Rp)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% laporan.forEach(row => { %>
+                <tr>
+                  <td><%= new Date(row.tanggal).toLocaleDateString('id-ID') %></td>
+                  <td><%= row.jumlah_pesanan %></td>
+                  <td>Rp <%= row.total_penjualan.toLocaleString('id-ID') %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <p style="margin-top:20px; text-align:center;">Tidak ada data penjualan dalam rentang tanggal ini.</p>
+        <% } %>
+
+        <a href="/dashboard/export?start=<%= start %>&end=<%= end %>" class="btn" style="margin-top:15px; display:inline-block;">
+          ⬇️ Download Excel
+        </a>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- SCRIPT CHART -->
+  <script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    const labels = <%- JSON.stringify(laporan.map(row => new Date(row.tanggal).toLocaleDateString('id-ID'))) %>;
+    const dataTotal = <%- JSON.stringify(laporan.map(row => row.total_penjualan)) %>;
+    const dataJumlah = <%- JSON.stringify(laporan.map(row => row.jumlah_pesanan)) %>;
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total Penjualan (Rp)',
+            data: dataTotal,
+            backgroundColor: 'rgba(230,126,34,0.6)',
+            borderColor: '#d35400',
+            borderWidth: 2
+          },
+          {
+            label: 'Jumlah Pesanan',
+            data: dataJumlah,
+            type: 'line',
+            borderColor: '#2c3e50',
+            borderWidth: 2,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom' },
+          title: {
+            display: true,
+            text: 'Grafik Penjualan Harian',
+            font: { size: 18, weight: 'bold' }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return 'Rp ' + value.toLocaleString('id-ID');
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

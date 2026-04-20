@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beri Ulasan</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <style>
+    .review-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+    }
+
+    .star-rating {
+      display: flex;
+      font-size: 32px;
+      cursor: pointer;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .star {
+      color: #ccc;
+      transition: 0.2s;
+    }
+
+    .star.selected {
+      color: #f1c40f;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="review-container">
+    <h2>⭐ Beri Ulasan Produk</h2>
+
+    <form action="/ulasan/tambah/<%= id_produk %>" method="POST">
+      
+      <div class="star-rating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+
+      <input type="hidden" name="rating" id="rating" required>
+
+      <label>Komentar (opsional):</label><br>
+      <textarea name="komentar" rows="4" style="width:100%; margin-top:10px; padding:10px;"></textarea>
+
+      <button type="submit" class="btn" style="margin-top:15px;">Kirim Ulasan</button>
+    </form>
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('.star');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        let value = this.getAttribute('data-value');
+        ratingInput.value = value;
+
+        stars.forEach(s => s.classList.remove('selected'));
+        for (let i = 0; i < value; i++) {
+          stars[i].classList.add('selected');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

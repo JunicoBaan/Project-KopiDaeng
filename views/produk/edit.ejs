@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Produk - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header-section">
+      <h1>Edit Produk</h1>
+    </div>
+
+    <form action="/produk/edit/<%= produk.id %>" method="POST" enctype="multipart/form-data" class="content-form">
+      
+      <input type="hidden" name="old_gambar" value="<%= produk.gambar %>">
+      
+      <div class="form-group">
+        <label for="nama_produk">Nama Produk</label>
+        <input type="text" id="nama_produk" name="nama_produk" value="<%= produk.nama_produk %>" required>
+      </div>
+
+      <!-- ✅ Tambahan: Dropdown kategori -->
+      <div class="form-group">
+        <label for="id_kategori">Kategori</label>
+        <select id="id_kategori" name="id_kategori" required>
+          <% if (kategori && kategori.length > 0) { %>
+            <% kategori.forEach(k => { %>
+              <option value="<%= k.id %>" <%= k.id === produk.id_kategori ? 'selected' : '' %>><%= k.nama_kategori %></option>
+            <% }) %>
+          <% } else { %>
+            <option value="">(Belum ada kategori)</option>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="deskripsi">Deskripsi</label>
+        <textarea id="deskripsi" name="deskripsi" required><%= produk.deskripsi %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="harga">Harga (Rp)</label>
+        <input type="number" id="harga" name="harga" value="<%= produk.harga %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="stok">Stok</label>
+        <input type="text" id="stok" name="stok" value="<%= produk.stok %>" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="gambar">Gambar Produk</label>
+
+        <% if (produk.gambar) { %>
+          <img src="/images/<%= produk.gambar %>" alt="Gambar saat ini" class="current-product-image">
+        <% } %>
+        
+        <div class="file-input-wrapper">
+            <input type="file" name="gambar" id="gambar" accept="image/*">
+            <span class="file-input-label">Ganti gambar (klik atau seret)</span>
+            <span class="file-input-hint">Biarkan kosong jika tidak ingin mengganti gambar.</span>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn">Perbarui Produk</button>
+        <a href="/produk" class="link-kembali">Batal</a>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('gambar');
+    const fileLabel = document.querySelector('.file-input-label');
+    const originalLabel = fileLabel

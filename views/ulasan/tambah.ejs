@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beri Ulasan</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    .rating-star {
+      font-size: 35px;
+      cursor: pointer;
+      color: #ccc;
+    }
+    .rating-star.active {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('../partials/navbar') %>
+
+  <div class="main-container">
+    <h1>Beri Ulasan untuk <%= produk.nama_produk %></h1>
+
+    <form action="/ulasan/tambah/<%= produk.id %>" method="POST">
+      
+      <label>Rating:</label>
+      <div id="ratingBox">
+        <span class="rating-star" data-value="1">★</span>
+        <span class="rating-star" data-value="2">★</span>
+        <span class="rating-star" data-value="3">★</span>
+        <span class="rating-star" data-value="4">★</span>
+        <span class="rating-star" data-value="5">★</span>
+      </div>
+
+      <input type="hidden" name="rating" id="ratingInput" value="5">
+
+      <br><br>
+
+      <label>Komentar:</label><br>
+      <textarea name="komentar" rows="4" style="width:100%" placeholder="Tulis ulasanmu..."></textarea>
+
+      <br><br>
+      <button class="btn" type="submit">Kirim Ulasan</button>
+    </form>
+  </div>
+
+<script>
+  const stars = document.querySelectorAll(".rating-star");
+  const ratingInput = document.getElementById("ratingInput");
+
+  stars.forEach(star => {
+    star.addEventListener("click", () => {
+      ratingInput.value = star.dataset.value;
+
+      stars.forEach(s => s.classList.remove("active"));
+      for (let i = 0; i < star.dataset.value; i++) {
+        stars[i].classList.add("active");
+      }
+    });
+  });
+
+  stars.forEach((s, i) => { if (i < 4) s.classList.add("active"); });
+</script>
+
+</body>
+</html>

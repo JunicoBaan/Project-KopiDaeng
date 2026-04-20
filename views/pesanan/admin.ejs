@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Pesanan - KopiDaeng</title>
+
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!-- DATATABLES CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+  <style>
+
+    .btn-reset {
+      background: #aaa;
+      padding: 7px 12px;
+      border-radius: 7px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .btn-reset:hover {
+      background: #888;
+    }
+
+    .btn-edit {
+      background: #d87a2f;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-edit:hover {
+      background: #bf6928;
+    }
+
+    select {
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="main-container">
+
+    <%- include('../partials/sidebar_admin') %>
+
+    <div class="header-section">
+      <h1>Daftar Pesanan Pelanggan</h1>
+    </div>
+
+    <!-- TABEL PESANAN -->
+    <table id="tabelAdminPesanan" class="display nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th>ID Pesanan</th>
+          <th>Nama Pelanggan</th>
+          <th>Tanggal Pesanan</th>
+          <th>Total Harga</th>
+          <th>Status Pesanan</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% if (pesanan.length > 0) { %>
+          <% pesanan.forEach(p => { %>
+            <tr>
+              <td>
+                <a href="/pesanan/detail/<%= p.id %>" class="btn-link">#<%= p.id %></a>
+              </td>
+
+              <td><%= p.nama_pelanggan %></td>
+              <td><%= new Date(p.tanggal_pesanan).toLocaleString('id-ID') %></td>
+              <td>Rp <%= p.total_harga.toLocaleString('id-ID') %></td>
+              <td><%= p.status_pesanan %></td>
+
+              <td>
+                <form action="/pesanan/update-status/<%= p.id %>" method="POST">
+                  <select name="status_pesanan" required>
+                    <option value="Menunggu Pembayaran" <%= p.status_pesanan==='Menunggu Pembayaran'?'selected':'' %>>Menunggu Pembayaran</option>
+                    <option value="Dibayar" <%= p.status_pesanan==='Dibayar'?'selected':'' %>>Dibayar</option>
+                    <option value="Diproses" <%= p.status_pesanan==='Diproses'?'selected':'' %>>Diproses</option>
+                    <option value="Selesai" <%= p.status_pesanan==='Selesai'?'selected':'' %>>Selesai</option>
+                    <option value="Dibatalkan" <%= p.status_pesanan==='Dibatalkan'?'selected':'' %>>Dibatalkan</option>
+                  </select>
+
+                  <button type="submit" class="btn-edit">Update</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+
+        <% } else { %>
+          <tr>
+            <td colspan="6" style="text-align:center; padding:20px;">Belum ada pesanan.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- DATATABLES JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#tabelAdminPesanan').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthChange: false,
+        language: {
+          search: "Cari Pesanan:",
+          zeroRecords: "Tidak ada data ditemukan.",
+          paginate: {
+            next: "→",
+            previous: "←"
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

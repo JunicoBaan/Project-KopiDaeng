@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Pengguna - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  
+  <!-- KEMBALI KE .main-container STANDAR (wrapper sidebar dihapus) -->
+  <div class="main-container">
+     <%- include('../partials/sidebar_admin') %>
+    <div class="header-section">
+      <h1>👥 Manajemen Pengguna</h1>
+      <div class="actions">
+        <a href="/dashboard" class="btn">Kembali</a>
+        <form action="/users/auto-nonaktif" method="POST" style="display:inline;">
+          
+          <button type="submit" class="btn btn-danger">Nonaktifkan Otomatis (>14 Hari)</button>
+        
+        </form>
+      </div>
+    </div>
+
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Terakhir Login</th>
+          <th>Inaktif (hari)</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (users && users.length > 0) { %>
+          <% users.forEach(u => { %>
+            <tr class="<%= u.status === 'nonaktif' ? 'inactive-row' : '' %>">
+              <td><%= u.id %></td>
+              <td><%= u.nama %></td>
+              <td><%= u.email %></td>
+              <td><%= u.role %></td>
+              <td><%= u.status %></td>
+              <td><%= u.last_login ? new Date(u.last_login).toLocaleString('id-ID') : 'Belum login' %></td>
+              <td><%= u.days_inactive || 0 %></td>
+              
+              <!-- Kolom Aksi -->
+              <td class="action-links-inline">
+                <!-- Arahkan ke /users/edit/:id -->
+                <a href="/users/edit/<%= u.id %>" class="btn-small btn-edit">Edit</a>
+                
+                <% if (u.status === 'aktif') { %>
+                  <form action="/users/nonaktif/<%= u.id %>" method="POST" style="display:inline;">
+                    <button class="btn-small btn-danger">Nonaktifkan</button>
+                  </form>
+                <% } %>
+
+                <a href="/users/hapus/<%= u.id %>" class="btn-small btn-delete" onclick="return confirm('Yakin ingin hapus user ini?')">Hapus</a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="8" style="text-align:center; padding: 20px;">Belum ada pengguna terdaftar.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

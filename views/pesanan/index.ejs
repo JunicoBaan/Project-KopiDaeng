@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Pesanan - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!-- DATATABLES CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
+
+  <style>
+    .dataTables_wrapper .dataTables_filter input {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate a {
+      padding: 5px 10px;
+      margin: 3px;
+      border-radius: 6px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 13px;
+      background: #d87a2f;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .btn-small:hover {
+      background: #bf6928;
+    }
+  </style>
+
+</head>
+<body>
+
+  <%- include('../partials/navbar') %>
+
+  <div class="main-container">
+
+    <div class="header-section">
+      <h1>Riwayat Pesanan</h1>
+      <a href="/produk/katalog" class="btn">Lanjut Belanja</a>
+    </div>
+
+    <% if (pesanan && pesanan.length > 0) { %>
+
+      <table id="tabelPesanan" class="display nowrap" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID Pesanan</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Total Harga</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pesanan.forEach(p => { %>
+            <tr>
+              <td>#<%= p.id %></td>
+              <td><%= new Date(p.tanggal_pesanan).toLocaleString('id-ID') %></td>
+              <td><%= p.status_pesanan %></td>
+              <td>Rp <%= p.total_harga.toLocaleString('id-ID', {minimumFractionDigits:2}) %></td>
+              <td>
+                <a href="/pesanan/saya/detail/<%= p.id %>" class="btn-small">Lihat Detail</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+    <% } else { %>
+      <p style="margin-top: 20px; text-align:center;">Belum ada pesanan yang tercatat.</p>
+    <% } %>
+
+  </div>
+
+  <!-- DATATABLES JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      $('#tabelPesanan').DataTable({
+        responsive: true,
+        pageLength: 5,
+        lengthChange: false,
+        language: {
+          search: "Cari:",
+          zeroRecords: "Tidak ada data pesanan",
+          paginate: {
+            next: "Berikutnya →",
+            previous: "← Sebelumnya"
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

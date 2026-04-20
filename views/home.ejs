@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KopiDaeng - Seduhan Terbaik</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<!-- ===============  BODY DIBERI CLASS  ================= -->
+<body class="home-page">
+
+  <!-- Navbar home -->
+  <%- include('partials/navbar_home') %>
+
+  <!-- ============================
+        HERO SECTION
+  ============================== -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1>Selamat Datang di <span>KopiDaeng</span></h1>
+      <p>Cita rasa kopi terbaik dari biji pilihan Nusantara.</p>
+
+      <div class="hero-search">
+        <form action="/produk/katalog" method="GET">
+          <input type="text" name="q" placeholder="Cari nama kopi atau jenis...">
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+
+      <a href="/produk/katalog" class="btn hero-btn">Jelajahi Produk Kami</a>
+    </div>
+  </header>
+
+  <div class="container home-container">
+
+    <!-- ============================
+          FITUR UTAMA
+    ============================== -->
+    <div class="home-features">
+      <div class="feature fade-in">
+        <span>☕</span> Biji Kopi Premium — biji pilihan berkualitas.
+      </div>
+      <div class="feature fade-in">
+        <span>📦</span> Pengiriman Cepat — se Indonesia.
+      </div>
+      <div class="feature fade-in">
+        <span>⭐</span> Rasa Konsisten — kualitas terjamin.
+      </div>
+    </div>
+
+    <!-- ============================
+          BEST SELLER
+    ============================== -->
+    <h2 class="section-title">🔥 Produk Best Seller</h2>
+
+    <div class="best-grid">
+      <% if (produkBest && produkBest.length > 0) { %>
+        <% produkBest.forEach(item => { %>
+          <div class="best-card fade-in">
+            <img src="/images/<%= item.gambar %>" alt="<%= item.nama_produk %>">
+            <h3><%= item.nama_produk %></h3>
+            <p>Rp <%= item.harga.toLocaleString('id-ID') %></p>
+            <a href="/produk/detail/<%= item.id %>" class="btn-detail">Lihat Detail</a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>Tidak ada data best seller.</p>
+      <% } %>
+    </div>
+
+    <!-- ============================
+          ABOUT SECTION
+    ============================== -->
+    <section class="about fade-in">
+      <h2 class="section-title">Tentang KopiDaeng</h2>
+      <p>
+        KopiDaeng hadir sebagai tempat terbaik untuk menikmati kopi Nusantara. 
+        Kami meracik dan memilih biji kopi terbaik untuk memberikan rasa yang autentik, 
+        aromatik, dan penuh karakter.
+      </p>
+
+      <p class="quote">“Hidup terlalu singkat untuk kopi yang biasa saja.”</p>
+    </section>
+
+    
+</body>
+<%- include('partials/footer') %>
+</html>

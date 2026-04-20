@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Bukti Pembayaran</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <div class="main-container">
+    <h2>Upload Bukti Pembayaran</h2>
+
+    <p>Silakan upload bukti transfer untuk pesanan #<%= id_pesanan %>.</p>
+
+    <form action="/pembayaran/upload/<%= id_pesanan %>" method="POST" enctype="multipart/form-data" class="content-form">
+
+      <div class="form-group">
+        <label>Bukti Pembayaran (Foto)</label>
+        <input type="file" name="bukti" accept="image/*" required>
+      </div>
+
+      <button type="submit" class="btn">Upload</button>
+    </form>
+  </div>
+</body>
+</html>

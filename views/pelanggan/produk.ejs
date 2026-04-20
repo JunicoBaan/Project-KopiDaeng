@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katalog Produk - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <style>
+
+    /* GRID */
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    /* CARD */
+    .produk-card {
+      background: rgba(255, 255, 255, 0.92);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: 0.3s ease;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .produk-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .produk-gambar {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .produk-nama {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    /* RATING */
+    .produk-rating {
+      margin: 6px 0 10px 0;
+      font-size: 15px;
+      color: #d87a2f;
+      font-weight: 600;
+    }
+
+    .rating-empty {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .produk-deskripsi {
+      font-size: 14px;
+      color: #444;
+      min-height: 60px;
+      text-align: justify;
+    }
+
+    .lihat-selengkapnya {
+      font-size: 14px;
+      color: #d87a2f;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .produk-harga {
+      font-weight: bold;
+      font-size: 17px;
+      margin: 10px 0;
+    }
+
+    .produk-stok {
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    /* BUTTONS */
+    .btn-beli {
+      background: #d87a2f;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 10px;
+      width: fit-content;
+      margin: 10px auto 0;
+      font-weight: 600;
+      display: block;
+      transition: 0.2s;
+    }
+
+    .btn-beli:hover {
+      background: #bf6928;
+    }
+
+    .btn-disabled {
+      background: #aaa;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 10px;
+      margin: 10px auto 0;
+      display: block;
+      cursor: not-allowed;
+    }
+
+    .btn-detail {
+      background: transparent;
+      color: #d87a2f;
+      border: 2px solid #d87a2f;
+      padding: 8px 18px;
+      border-radius: 10px;
+      width: fit-content;
+      margin: 15px auto 0;
+      font-weight: 600;
+      transition: 0.2s;
+      display: block;
+    }
+
+    .btn-detail:hover {
+      background: #d87a2f;
+      color: white;
+    }
+
+    /* POPUP */
+    .modal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .modal-box {
+      background: white;
+      width: 90%;
+      max-width: 550px;
+      padding: 20px;
+      border-radius: 15px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-img {
+      width: 100%;
+      border-radius: 12px;
+      height: 250px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .modal-text {
+      text-align: justify;
+      margin-bottom: 20px;
+      white-space: pre-line;
+    }
+
+    .modal-close {
+      background: #d87a2f;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <%- include('../partials/navbar', { user: user }) %>
+
+  <div class="main-container">
+
+    <div class="header-section">
+      <h1>Katalog Kopi Kami ☕</h1>
+    </div>
+
+    <div class="produk-grid">
+
+      <% produk.forEach(p => { %>
+      <div class="produk-card">
+
+        <img src="/images/<%= p.gambar %>" class="produk-gambar">
+
+        <h3 class="produk-nama"><%= p.nama_produk %></h3>
+
+        <!-- DESKRIPSI -->
+        <p class="produk-deskripsi">
+          <%= p.deskripsi.substring(0, 120) %>
+          <% if (p.deskripsi.length > 120) { %>
+            ... <span class="lihat-selengkapnya"
+              onclick="showDetail('<%= p.nama_produk %>', '/images/<%= p.gambar %>', `<%= p.deskripsi.replace(/`/g,'\\`') %>`)"
+            >Lihat Selengkapnya</span>
+          <% } %>
+        </p>
+
+        <p class="produk-harga">Rp <%= parseFloat(p.harga).toLocaleString('id-ID', { minimumFractionDigits: 2 }) %></p>
+        <p class="produk-stok">Stok: <%= p.stok %></p>
+
+        <!-- BUTTON: LIHAT DETAIL -->
+        <a href="/produk/detail/<%= p.id %>" class="btn-detail">Lihat Detail</a>
+
+        <% if (p.stok > 0) { %>
+          <a href="/pesanan/tambah/<%= p.id %>" class="btn-beli">Pesan Sekarang</a>
+        <% } else { %>
+          <button class="btn-disabled" disabled>Stok Habis</button>
+        <% } %>
+
+      </div>
+      <% }) %>
+
+    </div>
+  </div>
+
+  <!-- POPUP -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal-box">
+      <img id="modalImg" class="modal-img">
+      <h3 id="modalTitle" class="modal-title"></h3>
+      <p id="modalText" class="modal-text"></p>
+      <div class="modal-close" onclick="closeModal()">Tutup</div>
+    </div>
+  </div>
+
+  <script>
+    function showDetail(nama, gambar, deskripsi) {
+      document.getElementById("modalImg").src = gambar;
+      document.getElementById("modalTitle").innerText = nama;
+      document.getElementById("modalText").innerText = deskripsi;
+      document.getElementById("modalBg").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modalBg").style.display = "none";
+    }
+  </script>
+
+</body>
+<%- include('../partials/footer') %>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Produk - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+
+  <div class="main-container">
+     <%- include('../partials/sidebar_admin') %>
+    <div class="header-section">
+      <h1>Daftar Produk</h1>
+      <a href="/produk/create" class="btn">Tambah Produk Baru</a>
+    </div>
+
+
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Nama Produk</th>
+          <th>Kategori</th> 
+          <th>Deskripsi</th>
+          <th>Harga</th>
+          <th>Stok</th>
+          <th>Gambar</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (produk && produk.length > 0) { %>
+          <% produk.forEach(p => { %>
+            <tr>
+              <td><%= p.nama_produk %></td>
+              <td><%= p.nama_kategori || '-' %></td> 
+              <td><%= p.deskripsi %></td>
+              <td>
+                <% 
+                  // pastikan harga ditampilkan rapi
+                  let harga = typeof p.harga === 'number' ? p.harga : parseFloat(p.harga || 0);
+                %>
+                Rp <%= harga.toLocaleString('id-ID', { minimumFractionDigits: 2 }) %>
+              </td>
+              <td><%= (p.stok !== null && p.stok !== undefined) ? p.stok : '0' %></td>
+              <td>
+                <% if (p.gambar) { %>
+                  <img src="/images/<%= p.gambar %>" alt="<%= p.nama_produk %>" class="product-image">
+                <% } else { %>
+                  <span>-</span>
+                <% } %>
+              </td>
+              <td class="action-links">
+                <a href="/produk/edit/<%= p.id %>" class="btn-edit">Edit</a>
+                <a href="/produk/delete/<%= p.id %>" class="btn-delete" onclick="return confirm('Anda yakin ingin menghapus produk ini?')">Hapus</a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px;">
+              Belum ada produk. Silakan tambahkan produk baru.
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

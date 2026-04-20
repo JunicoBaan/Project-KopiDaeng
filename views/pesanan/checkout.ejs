@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  <div class="main-container">
+    <div class="header-section">
+      <h1>Checkout Pesanan</h1>
+      <a href="/produk/katalog" class="btn">Kembali ke Katalog</a>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <% if (produk.gambar) { %>
+        <img src="/images/<%= produk.gambar %>" alt="<%= produk.nama_produk %>" class="current-product-image" style="max-width: 250px; margin: 0 auto;">
+      <% } else { %>
+        <img src="/images/default.jpg" alt="Produk" class="current-product-image" style="max-width: 250px; margin: 0 auto;">
+      <% } %>
+    </div>
+    
+    <div class="checkout-product-info" style="text-align: center;">
+      <h3><%= produk.nama_produk %></h3>
+      <p><%= produk.deskripsi %></p>
+      <p>Stok tersedia: <%= produk.stok %></p>
+    </div>
+
+    <form action="/pesanan/checkout" method="POST" class="content-form">
+      <input type="hidden" name="id_produk" value="<%= produk.id %>">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="jumlah">Jumlah</label>
+          <input type="number" name="jumlah" id="jumlah" value="1" min="1" max="<%= produk.stok %>" required style="width:100px;">
+        </div>
+        <div class="total-display">
+          Total: <span>Rp <%= (parseFloat(produk.harga) || 0).toLocaleString('id-ID', {minimumFractionDigits:2}) %></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="alamat">Alamat Pengiriman</label>
+        <textarea id="alamat" name="alamat" required placeholder="Masukkan alamat lengkap pengiriman..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="telepon">Nomor Telepon</label>
+        <input type="text" id="telepon" name="telepon" required placeholder="08xxxxxxxxxx">
+      </div>
+
+      <div class="form-group">
+        <label for="catatan">Catatan (opsional)</label>
+        <input type="text" id="catatan" name="catatan" placeholder="Contoh: Tolong kirim sore hari">
+      </div>
+
+      <div class="form-group">
+        <label for="metode_pembayaran">Metode Pembayaran</label>
+        <select id="metode_pobayaran" name="metode_pembayaran" required>
+          <option value="Transfer Bank">Transfer Bank</option>
+          <option value="COD">Bayar di Tempat (COD)</option>
+        </select>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn">Konfirmasi & Pesan</button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    const harga = parseFloat('<%= produk.harga %>') || 0;
+    const jumlahInput = document.getElementById('jumlah');
+    const totalSpan = document.querySelector('.total-display span'); 
+
+    jumlahInput.addEventListener('input', () => {
+      let j = parseInt(jumlahInput.value);
+      if (isNaN(j) || j < 1) {
+        j = 1;
+      }
+      const total = harga * j;
+      totalSpan.innerText = 'Rp ' + total.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+    });
+  </script>
+</body>
+</html>

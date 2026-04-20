@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Pesanan #<%= pesanan.id %> - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+
+  <%- include('../partials/navbar') %>
+
+  <div class="main-container">
+
+    <div class="header-section">
+      <h1>Detail Pesanan #<%= pesanan.id %></h1>
+      <a href="/pesanan/saya" class="btn">← Kembali ke Riwayat</a>
+    </div>
+
+    <div class="order-info">
+      <p><strong>Tanggal Pesanan:</strong> <%= new Date(pesanan.tanggal_pesanan).toLocaleString('id-ID') %></p>
+      <p><strong>Total Harga:</strong> Rp <%= pesanan.total_harga.toLocaleString('id-ID') %></p>
+      <p><strong>Alamat:</strong> <%= pesanan.alamat %></p>
+      <p><strong>Telepon:</strong> <%= pesanan.telepon %></p>
+      <p><strong>Status Pesanan:</strong> <%= pesanan.status_pesanan %></p>
+    </div>
+
+    <% if (pesanan.jasa_kurir) { %>
+      <div class="shipping-info">
+        <h2>Informasi Pengiriman 🚚</h2>
+        <p><strong>Kurir:</strong> <%= pesanan.jasa_kurir %></p>
+        <p><strong>Nomor Resi:</strong> <%= pesanan.nomor_resi %></p>
+        <p><strong>Status Kirim:</strong> <%= pesanan.status_kirim %></p>
+        <p><strong>Tanggal Kirim:</strong> 
+          <%= pesanan.tanggal_kirim ? new Date(pesanan.tanggal_kirim).toLocaleDateString('id-ID') : '-' %>
+        </p>
+        <p>
+          <strong>Estimasi Tiba:</strong>
+          <% if (pesanan.tanggal_kirim) { %>
+            <%= new Date(new Date(pesanan.tanggal_kirim).getTime() + 3*24*60*60*1000).toLocaleDateString('id-ID') %>
+          <% } else { %> - <% } %>
+        </p>
+
+        <% if (pesanan.foto_bukti) { %>
+          <p><strong>Bukti Penerimaan:</strong></p>
+          <img src="/uploads/<%= pesanan.foto_bukti %>" style="max-width:200px;border-radius:8px;">
+        <% } %>
+      </div>
+    <% } %>
+
+    <h2>Produk Dipesan ☕</h2>
+
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Nama Produk</th>
+          <th>Jumlah</th>
+          <th>Harga Satuan</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% detail.forEach(item => { %>
+          <tr>
+            <td><%= item.nama_produk %></td>
+            <td><%= item.jumlah %></td>
+            <td>Rp <%= item.hargaSaat_pesan.toLocaleString('id-ID') %></td>
+            <td>Rp <%= item.subtotal.toLocaleString('id-ID') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <% if (pesanan.status_kirim === 'Dikirim') { %>
+      <div class="confirm-box">
+        <h3>Konfirmasi Pesanan Diterima</h3>
+        <form action="/pesanan/saya/terima/<%= pesanan.id %>" method="POST" enctype="multipart/form-data">
+          <label>Upload Bukti Penerimaan:</label>
+          <input type="file" name="foto_bukti" required><br><br>
+          <button class="btn">Pesanan Diterima ✅</button>
+        </form>
+      </div>
+    <% } %>
+
+    <% if (pesanan.status_pesanan === 'Selesai') { %>
+      <div class="review-box">
+        <a href="/ulasan/tambah/<%= detail[0].id_produk %>" class="btn" style="margin-top:20px;">
+          ⭐ Beri Ulasan Produk
+        </a>
+      </div>
+    <% } %>
+
+  </div>
+
+</body>
+</html>

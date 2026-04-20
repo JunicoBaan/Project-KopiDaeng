@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Pengguna - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="header-section">
+      <h1>✏️ Edit Data Pengguna</h1>
+      <a href="/users/manage" class="btn">Kembali</a>
+    </div>
+
+    <form action="/users/edit/<%= data.id %>" method="POST" class="content-form">
+      
+      <div class="form-group">
+        <label for="nama">Nama</label>
+        <input type="text" id="nama" name="nama" value="<%= data.nama %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<%= data.email %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="user" <%= data.role === 'user' ? 'selected' : '' %>>User</option>
+          <option value="admin" <%= data.role === 'admin' ? 'selected' : '' %>>Admin</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" name="status">
+          <option value="aktif" <%= data.status === 'aktif' ? 'selected' : '' %>>Aktif</option>
+          <option value="nonaktif" <%= data.status === 'nonaktif' ? 'selected' : '' %>>Nonaktif</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

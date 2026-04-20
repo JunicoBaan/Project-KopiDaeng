@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pembayaran Premium - KopiDaeng</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Wrapper */
+    .pay-container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Tab Buttons */
+    .pay-tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      gap: 10px;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      border: none;
+      background: #eee;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #d35400;
+      color: white;
+    }
+
+    /* Card Style */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+      margin-bottom: 25px;
+    }
+
+    /* Bank List */
+    .bank-option {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .bank-option.selected {
+      border-color: #d35400;
+      background: #fff7e6;
+    }
+
+    .bank-option img {
+      height: 40px;
+    }
+
+    /* QRIS Modal */
+    .modal-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .modal-box img {
+      width: 230px;
+      margin-bottom: 15px;
+    }
+
+    .close-modal {
+      background: #d35400;
+      color: white;
+      padding: 8px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="main-container pay-container">
+
+  <h1>Upload Bukti Pembayaran</h1>
+  <p>Total yang harus dibayar:</p>
+  <h2 style="color:#d35400">
+    Rp <%= pesanan.total_harga.toLocaleString('id-ID') %>
+  </h2>
+
+  <!-- PAYMENT TABS -->
+  <div class="pay-tabs">
+    <button class="tab-btn active" onclick="showTab('bank')">Transfer Bank</button>
+    <button class="tab-btn" onclick="showTab('qris')">QRIS</button>
+  </div>
+
+  <!-- ==========================
+        BANK TRANSFER SECTION
+  =========================== -->
+  <div id="bank" class="glass-card">
+
+    <h3>Pilih Bank</h3>
+
+    <div class="bank-option" onclick="selectBank(this)">
+      <img src="/images/bca.png">
+      <div>
+        <b>BCA</b><br>
+        1234567890 a.n KopiDaeng
+      </div>
+    </div>
+
+    <div class="bank-option" onclick="selectBank(this)">
+      <img src="/images/bri.png">
+      <div>
+        <b>BRI</b><br>
+        9876543210 a.n KopiDaeng
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================
+          QRIS SECTION
+  =========================== -->
+  <div id="qris" class="glass-card" style="display:none;">
+    <h3>Scan QRIS untuk Membayar</h3>
+    <button onclick="openQris()" class="btn" style="margin-top:10px;">Tampilkan QRIS</button>
+  </div>
+
+  <!-- ==========================
+         FORM UPLOAD
+  =========================== -->
+  <form action="/pesanan/upload-bukti/<%= pesanan.id %>" method="POST" enctype="multipart/form-data" class="glass-card">
+
+    <div class="form-group">
+      <label>Upload Bukti Pembayaran</label>
+      <input type="file" name="bukti_transfer" required>
+    </div>
+
+    <button type="submit" class="btn">Kirim Bukti Pembayaran</button>
+  </form>
+
+</div>
+
+<!-- ========== QRIS MODAL ========== -->
+<div class="modal-bg" id="modalQris">
+  <div class="modal-box">
+    <img src="/images/qris.png">
+    <br>
+    <button class="close-modal" onclick="closeQris()">Tutup</button>
+  </div>
+</div>
+
+<!-- ========== JS INTERACTION ========== -->
+<script>
+  function showTab(tab) {
+    document.getElementById("bank").style.display = (tab === "bank") ? "block" : "none";
+    document.getElementById("qris").style.display = (tab === "qris") ? "block" : "none";
+
+    let tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
+  }
+
+  function selectBank(el) {
+    document.querySelectorAll(".bank-option").forEach(item => item.classList.remove("selected"));
+    el.classList.add("selected");
+  }
+
+  function openQris() {
+    document.getElementById("modalQris").style.display = "flex";
+  }
+
+  function closeQris() {
+    document.getElementById("modalQris").style.display = "none";
+  }
+</script>
+
+</body>
+</html>

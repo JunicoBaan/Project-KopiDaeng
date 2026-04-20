@@ -1,0 +1,20 @@
+<%
+  var currentActive = (typeof active !== 'undefined' && active) ? active : '';
+%>
+
+<aside class="dashboard-sidebar">
+  <div class="sidebar-header">
+    <h3>KopiDaeng ☕</h3>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="/dashboard" class="<%= currentActive === 'dashboard' ? 'active' : '' %>">📊 Dashboard</a>
+    <a href="/produk" class="<%= currentActive === 'produk' ? 'active' : '' %>">📦 Manajemen Produk</a>
+    <a href="/users/manage" class="<%= currentActive === 'users' ? 'active' : '' %>">👥 Manajemen Users</a>
+    <a href="/pesanan" class="<%= currentActive === 'pesanan' ? 'active' : '' %>">🛒 Manajemen Pesanan</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="/users/logout" class="logout-link">Logout</a>
+  </div>
+</aside>
