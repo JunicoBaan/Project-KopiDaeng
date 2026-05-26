@@ -42,15 +42,5 @@ Halaman Pengelola (Admin Dashboard & Management)
 
 
 
-Sorotan Teknis (Technical Highlights)
-•	Penerapan Role-Based Access Control (RBAC): Backend mengimplementasikan middleware berlapis seperti verifyToken dan isAdmin untuk memeriksa kredensial JWT di setiap REST endpoint. Ini memastikan user biasa tidak bisa mengakses data sensitif admin (seperti ekspor Excel atau perubahan status pembayaran).
-•	Query SQL Relasional yang Teroptimasi: Menghindari masalah inefisiensi query (seperti N+1 query problem) dengan memanfaatkan SQL JOIN, pengelompokan GROUP BY, serta fungsi agregat database seperti COALESCE, AVG, dan COUNT untuk menyajikan data statistik secara instan dalam satu kali eksekusi database trip.
-•	Interseptor Token Global (Axios Interceptors): Menggunakan interseptor Axios di sisi klien untuk menyisipkan header token JWT secara dinamis. Pola ini meminimalkan pengulangan penulisan kode autentikasi di frontend.
-•	Keamanan Database (Prepared Statements): Semua interaksi database menggunakan teknik parameterized queries (tanda tanya ? di driver MySQL2) untuk melindungi aplikasi secara total dari serangan SQL Injection.
 
-Apa yang Saya Pelajari Melalui Proyek Ini
-1.	Manajemen State & Navigasi Klien: Memahami cara kerja routing yang aman pada aplikasi Single Page Application (SPA) menggunakan React Router DOM, termasuk proteksi rute agar user tidak diizinkan masuk ke halaman admin tanpa izin khusus.
-2.	Keamanan Endpoint API (REST Security): Belajar mengamankan REST API dengan enkripsi satu arah (Bcrypt) dan arsitektur token JWT, serta memahami pentingnya memisahkan hak akses admin dan customer di tingkat middleware backend.
-3.	Penanganan File & Penyimpanan Statis: Mengimplementasikan proses penanganan berkas multi-part form data melalui Express dan Multer, serta menyajikan direktori statis untuk akses gambar yang efisien.
-4.	Generasi Dokumen di Sisi Server: Belajar memanipulasi file spreadsheet Microsoft Excel secara terprogram melalui backend node.js untuk menghasilkan laporan bisnis yang siap pakai bagi operasional perusahaan.
 
