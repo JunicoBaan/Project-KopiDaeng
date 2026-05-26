@@ -1,0 +1,263 @@
+/* HEADER SECTION */
+.katalog-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.katalog-header h1 {
+  font-size: 2.8rem;
+  color: #3d2b1f;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.katalog-header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* GRID */
+.produk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 10px;
+}
+
+/* CARD */
+.produk-card {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.05);
+  height: 100%;
+}
+
+.produk-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(230, 126, 34, 0.2);
+}
+
+.img-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.produk-gambar {
+  width: 100%;
+  height: 220px;
+  object-fit: contain;
+  transition: transform 0.5s ease;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.produk-card:hover .produk-gambar {
+  transform: scale(1.08);
+}
+
+/* BADGE STOK */
+.badge-stok {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #3d2b1f;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.badge-stok.habis {
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+}
+
+/* CONTENT CARD */
+.produk-content {
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.produk-nama {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #3d2b1f;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+}
+
+.produk-deskripsi {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.lihat-selengkapnya {
+  color: #e67e22;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.lihat-selengkapnya:hover {
+  color: #d35400;
+  text-decoration: underline;
+}
+
+.produk-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.produk-harga {
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: #e67e22;
+  margin: 0;
+}
+
+/* BUTTONS */
+.btn-group {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.btn-detail, .btn-beli, .btn-disabled {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.3s;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-detail {
+  background: #fdf2e9;
+  color: #e67e22;
+  border: 1px solid #fae5d3;
+}
+
+.btn-detail:hover {
+  background: #fae5d3;
+  color: #d35400;
+}
+
+.btn-beli {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.btn-beli:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(230, 126, 34, 0.5);
+}
+
+.btn-disabled {
+  background: #e0e0e0;
+  color: #95a5a6;
+  cursor: not-allowed;
+  border: none;
+}
+
+/* POPUP */
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  padding: 35px;
+  border-radius: 24px;
+  animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.modal-img {
+  width: 100%;
+  border-radius: 16px;
+  height: 260px;
+  object-fit: cover;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #3d2b1f;
+  margin-bottom: 10px;
+}
+
+.modal-text {
+  text-align: justify;
+  margin-bottom: 30px;
+  color: #666;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  background: #f5f5f5;
+  color: #333;
+  padding: 12px 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.2s;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-close:hover {
+  background: #e0e0e0;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.8) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}

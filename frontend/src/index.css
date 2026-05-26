@@ -1,0 +1,31 @@
+/* File ini sengaja dikosongkan karena kita menggunakan /stylesheets/style.css dari backend lama */
+
+.user-navbar .cart-link.active {
+  color: #fff !important;
+  border-bottom: 2px solid #ffcc80;
+  padding-bottom: 4px;
+}
+
+/* Tombol Kembali / Secondary Batal */
+.btn-kembali {
+  text-decoration: none !important;
+  white-space: nowrap;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: #f5f6fa !important;
+  color: #2f3640 !important;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dcdde1;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.btn-kembali:hover {
+  background: #e8e9ec !important;
+  border-color: #b5babf;
+  transform: translateY(-1px);
+}
